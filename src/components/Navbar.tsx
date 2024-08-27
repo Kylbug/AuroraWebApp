@@ -1,10 +1,26 @@
+import { useLocation } from "@solidjs/router";
 import ThemeController from "./ThemeController";
 
+function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function getRouteName(pathname: string) {
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments.length === 0) {
+    return "Dashboard";
+  }
+  return capitalizeFirstLetter(segments[segments.length - 1]);
+}
+
 export default function Navbar() {
+  const location = useLocation();
+  const routeName = getRouteName(location.pathname);
+
   return (
     <div class="navbar bg-base-100">
       <div class="flex-1">
-        <a class="text-2xl ml-4">Dashboard</a>
+        <a class="text-2xl ml-4">{routeName}</a>
       </div>
       <div class="flex-none gap-2">
         <div class="form-control">

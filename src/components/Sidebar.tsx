@@ -92,15 +92,15 @@ export default function Sidebar() {
                     <NormalButton 
                         text="Table Manager" 
                         icon={<i class="fa-solid fa-table"></i>} 
-                        href="/tableManager"
+                        href="/table-manager"
                     />
                     <DropdownButton 
                         text="User Management" 
                         icon={<i class="fa-solid fa-users"></i>} 
-                        href="/userManagement" 
+                        href="/user-management" 
                         subItems={[
-                            { text: "User", href: "/userManagement/user" },
-                            { text: "Roles", href: "/userManagement/roles" },
+                            { text: "User", href: "/user-management/user" },
+                            { text: "Roles", href: "/user-management/roles" },
                         ]}
                     />
                 </div>

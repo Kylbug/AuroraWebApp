@@ -8,6 +8,7 @@ export default createHandler(() => (
         <head>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <script src="https://kit.fontawesome.com/fbe25c8d5d.js" crossorigin="anonymous"></script>
           <link rel="icon" href="/favicon.ico" />
           {assets}
         </head>

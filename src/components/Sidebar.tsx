@@ -26,9 +26,7 @@ function NormalButton(props: NormalButtonProps) {
     return (
         <div class="tooltip tooltip-right" data-tip={props.text}>
             <a href={props.href}>
-                <button
-                    class={`btn btn-ghost m-1 ml-3 mr-3 ${isActive() ? 'btn-active' : ''}`}
-                >
+                <button class={`btn btn-ghost m-1 ml-3 mr-3 ${isActive() ? 'btn-active' : ''}`}>
                     <div class='flex items-center justify-center w-5 h-5'>
                         <span>{props.icon}</span> 
                     </div>
@@ -53,14 +51,14 @@ function DropdownButton(props: DropdownButtonProps) {
     };
 
     return (
-        <div class="tooltip tooltip-right text-neutral-content" data-tip={props.text}>
+        <div class="tooltip tooltip-right" data-tip={props.text}>
             <div class='dropdown dropdown-bottom dropdown-hover'>
                 <a href={props.href}>
-                    <div tabIndex={0} role='button' class={`btn btn-ghost m-1 ml-3 mr-3 ${isActive() ? 'btn-active' : ''}`}>
+                    <button tabIndex={0} class={`btn btn-ghost m-1 ml-3 mr-3 ${isActive() ? 'btn-active' : ''}`}>
                         <div class='flex items-center justify-center w-5 h-5'>
                             <span>{props.icon}</span> 
                         </div>
-                    </div>
+                    </button>
                 </a>
                 <ul tabIndex={0} class='dropdown-content menu bg-base-100 rounded-box z-[1] w-56 p-2 pt-2 ml-8 shadow-2xl'>
                     {props.subItems.map((item) => (
@@ -93,12 +91,12 @@ export default function Sidebar() {
                     />
                     <NormalButton 
                         text="Table Manager" 
-                        icon={<i class="fa-solid fa-cog"></i>} 
+                        icon={<i class="fa-solid fa-table"></i>} 
                         href="/tableManager"
                     />
                     <DropdownButton 
                         text="User Management" 
-                        icon={<i class="fa-solid fa-user"></i>} 
+                        icon={<i class="fa-solid fa-users"></i>} 
                         href="/userManagement" 
                         subItems={[
                             { text: "User", href: "/userManagement/user" },

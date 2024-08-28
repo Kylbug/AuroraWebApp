@@ -35,6 +35,14 @@ export default function ThemeController() {
             aria-label="Dark"
             value="europaDark" />
         </li>
+        <li>
+          <input
+            type="radio"
+            name="theme-dropdown"
+            class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Real Dark"
+            value="dark" />
+        </li>
       </ul>
     </div>
   );

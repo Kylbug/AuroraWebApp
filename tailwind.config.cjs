@@ -9,13 +9,14 @@ module.exports = {
   ],
   daisyui: {
     themes: [
+      "dark",
       {
         europaLight: {
           "primary": "#b91c1c",
           "secondary": "#9ca3af",
-          "accent": "#4b5563",
+          "accent": "#6b7280",
           "neutral": "#6b7280",
-          "base-100": "#f5f5f4",
+          "base-100": "#e7e5e4",
           "info": "#0ea5e9",
           "success": "#84cc16",
           "warning": "#facc15",
@@ -24,15 +25,15 @@ module.exports = {
         europaDark: {
           "primary": "#b91c1c",
           "secondary": "#9ca3af",
-          "accent": "#4b5563",
+          "accent": "#6b7280",
           "neutral": "#6b7280",
-          "base-100": "#1c1917",
+          "base-100": "#44403c",
           "info": "#0ea5e9",
           "success": "#84cc16",
           "warning": "#facc15",
           "error": "#dc2626",
-        },
+        }
       }
-    ],
-  },
+    ]
+  }
 };

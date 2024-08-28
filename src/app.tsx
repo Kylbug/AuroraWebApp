@@ -15,7 +15,7 @@ export default function App() {
           <div class="flex flex-col flex-1">
             <Navbar />
             <div class="divider m-0 bg-base-100 h-0"/>
-            <div class="flex-1 p-4 overflow-auto">
+            <div class="flex-1 p-4 overflow-auto text-base-content">
               <Suspense>{props.children}</Suspense>
             </div>
           </div>

@@ -1,0 +1,290 @@
+[
+    {
+        "id": 1,
+        "table": "personen",
+        "column": "id",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "numericpositiveinteger",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 2,
+        "table": "personen",
+        "column": "firstname",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 3,
+        "table": "personen",
+        "column": "lastname",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 4,
+        "table": "personen",
+        "column": "salutation",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 5,
+        "table": "personen",
+        "column": "privatephone",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "phonenumber",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 6,
+        "table": "personen",
+        "column": "mobilephone",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "phonenumber",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 7,
+        "table": "personen",
+        "column": "e-mail",
+        "SQLdatatype": "string",
+        "E3KDatatype": "Email",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 8,
+        "table": "personen",
+        "column": "notes",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 9,
+        "table": "betrieb",
+        "column": "id",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "numericpositiveinteger",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 10,
+        "table": "betrieb",
+        "column": "name",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 11,
+        "table": "betrieb",
+        "column": "salutation",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 12,
+        "table": "betrieb",
+        "column": "businessphone",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "phonenumber",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 13,
+        "table": "betrieb",
+        "column": "faxnummer",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "phonenumber",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 14,
+        "table": "betrieb",
+        "column": "e-mail",
+        "SQLdatatype": "string",
+        "E3KDatatype": "email",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 15,
+        "table": "betrieb",
+        "column": "homepage",
+        "SQLdatatype": "string",
+        "E3KDatatype": "URL",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 16,
+        "table": "betrieb",
+        "column": "notes",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": false,
+        "default": true
+    },
+    {
+        "id": 17,
+        "table": "adressen",
+        "column": "id",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "numericpositiveinteger",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 18,
+        "table": "adressen",
+        "column": "street&number",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 19,
+        "table": "adressen",
+        "column": "postalcode",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "numericpositiveinteger",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 20,
+        "table": "adressen",
+        "column": "city",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 21,
+        "table": "adressen",
+        "column": "canton",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 22,
+        "table": "adressen",
+        "column": "country",
+        "SQLdatatype": "string",
+        "E3KDatatype": "text",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 23,
+        "table": "adressen",
+        "column": "adressstartdate",
+        "SQLdatatype": "date",
+        "E3KDatatype": "datedefault",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 24,
+        "table": "adressen-betrieb",
+        "column": "betrieb_id",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "numericpositiveinteger",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 25,
+        "table": "adressen-betrieb",
+        "column": "adress_id",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "numericpositiveinteger",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 26,
+        "table": "adressen-betrieb",
+        "column": "postfach",
+        "SQLdatatype": "bool",
+        "E3KDatatype": "checkbox",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 27,
+        "table": "adressen-betrieb",
+        "column": "postadresse",
+        "SQLdatatype": "bool",
+        "E3KDatatype": "checkbox",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 28,
+        "table": "adressen-betrieb",
+        "column": "rechnungsadresse",
+        "SQLdatatype": "bool",
+        "E3KDatatype": "checkbox",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 29,
+        "table": "adressen-personen",
+        "column": "person_id",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "numericpositiveinteger",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 30,
+        "table": "adressen-personen",
+        "column": "adress_id",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "numericpositiveinteger",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 31,
+        "table": "betrieb-personen",
+        "column": "betrieb_id",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "numericpositiveinteger",
+        "notNull": true,
+        "default": true
+    },
+    {
+        "id": 32,
+        "table": "betrieb-personen",
+        "column": "person_id",
+        "SQLdatatype": "numeric",
+        "E3KDatatype": "numericpositiveinteger",
+        "notNull": true,
+        "default": true
+    }
+]

@@ -13,9 +13,11 @@
     "@solidjs/router": "^0.14.3",
     "@solidjs/start": "^1.0.6",
     "autoprefixer": "^10.4.19",
+    "pocketbase": "^0.21.5",
     "postcss": "^8.4.38",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.18",
+    "solid-start": "^0.3.11",
     "tailwindcss": "^3.4.3",
     "theme-change": "^2.5.0",
     "vinxi": "^0.4.1"

@@ -9,12 +9,11 @@ export function myRouteData() {
 
 export default function PersonList() {
   const columns = ["Id", "Column", "Datatype", "NotNull"];
-  const persons = useRouteData();
 
   return (
     <div>
       <h1>Personenliste</h1>
-      <Table<Person> columns={columns} data={persons()} />
+      <Table<Person> columns={columns}/>
     </div>
   );
 }

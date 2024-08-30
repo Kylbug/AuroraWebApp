@@ -18,5 +18,5 @@ export function routeData(apiRoute: string) {
         throw new Error("An unknown error occurred");
       }
     }
-  });
+  }, {key: 'persons'});
 }

@@ -1,30 +1,38 @@
-import { For } from "solid-js";
+import { refetchRouteData, useRouteData} from "solid-start";
+import { Person } from "~/models/Person";
+import { routeData } from "~/routes/api/apiRoute";
+import { For, Show } from "solid-js";
 
-export default function Table<T extends { [key: string]: any }>(props: { columns: string[], data: T[] | undefined }) {
+export default function PersonTable() {
+  const persons = useRouteData<typeof routeData>();
+
   return (
-    <div class="overflow-x-auto">
-      {!props.data ? (
-        <div>Loading...</div>
-      ) : (
-        <table class="table">
-          <thead>
-            <tr>
-              <For each={props.columns}>{(column) => <th>{column}</th>}</For>
-            </tr>
-          </thead>
-          <tbody>
-            <For each={props.data}>
-              {(item) => (
-                <tr class="hover">
-                  <For each={Object.values(item)}>
-                    {(value) => <td>{value?.toString()}</td>}
-                  </For>
-                </tr>
-              )}
-            </For>
-          </tbody>
-        </table>
-      )}
+    <div>
+      <button class="btn" onClick={() => refetchRouteData('persons')}>Refetch</button>
+      <Show when={!persons.loading} fallback={<div>Loading...</div>}>
+        <div class="overflow-x-auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <For each={["Id", "Column", "Datatype", "NotNull"]}>
+                  {(column) => <th>{column}</th>}
+                </For>
+              </tr>
+            </thead>
+            <tbody>
+              <For each={persons()}>
+                {(item) => (
+                  <tr class="hover">
+                    <For each={Object.values(item)}>
+                      {(value) => <td>{value?.toString()}</td>}
+                    </For>
+                  </tr>
+                )}
+              </For>
+            </tbody>
+          </table>
+        </div>
+      </Show>
     </div>
   );
 }

@@ -28,7 +28,7 @@ function NormalButton(props: NormalButtonProps) {
             <a href={props.href}>
                 <button class={`btn btn-ghost m-1 ml-3 mr-3 ${isActive() ? 'btn-active' : ''}`}>
                     <div class='flex items-center justify-center w-5 h-5'>
-                        <span>{props.icon}</span> 
+                        <span class="text-base-content">{props.icon}</span> 
                     </div>
                 </button>
             </a>
@@ -56,14 +56,14 @@ function DropdownButton(props: DropdownButtonProps) {
                 <a href={props.href}>
                     <button tabIndex={0} class={`btn btn-ghost m-1 ml-3 mr-3 ${isActive() ? 'btn-active' : ''}`}>
                         <div class='flex items-center justify-center w-5 h-5'>
-                            <span>{props.icon}</span> 
+                            <span class="text-base-content">{props.icon}</span> 
                         </div>
                     </button>
                 </a>
                 <ul tabIndex={0} class='dropdown-content menu bg-base-100 rounded-box z-[1] w-56 p-2 pt-2 ml-8 shadow-2xl'>
                     {props.subItems.map((item) => (
-                        <li class={`mt-1 mb-1 `}>
-                            <a href={item.href}>{item.text}</a>
+                        <li class={`mt-1 mb-1 text-base-content`}>
+                            <a class="text-base-content" href={item.href}>{item.text}</a>
                         </li>
                     ))}
                 </ul>
@@ -72,31 +72,29 @@ function DropdownButton(props: DropdownButtonProps) {
     );
 }
 
-
-
 export default function Sidebar() {
     return (
         <aside class="bg-base-100 flex flex-col items-center h-screen">
             <div class="bg-base-100 mt-4 mb-4">
                 <a class="">
-                    <i class="fa-solid fa-chart-simple text-4xl"></i>
+                    <i class="fa-solid fa-chart-simple text-4xl text-base-content"></i>
                 </a>
             </div>
             <div class='h-full flex flex-col justify-start'>
-                <div class="flex flex-col">
+                <div class="flex flex-col base-content">
                     <NormalButton 
                         text="Dashboard" 
-                        icon={<i class="fa-solid fa-house"></i>} 
+                        icon={<i class="fa-solid fa-house text-base-content"></i>} 
                         href="/" 
                     />
                     <NormalButton 
                         text="Table Manager" 
-                        icon={<i class="fa-solid fa-table"></i>} 
+                        icon={<i class="fa-solid fa-table text-base-content"></i>} 
                         href="/table-manager"
                     />
                     <DropdownButton 
                         text="User Management" 
-                        icon={<i class="fa-solid fa-users"></i>} 
+                        icon={<i class="fa-solid fa-users text-base-content"></i>} 
                         href="/user-management" 
                         subItems={[
                             { text: "User", href: "/user-management/user" },

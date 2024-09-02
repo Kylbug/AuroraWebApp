@@ -9,29 +9,28 @@ module.exports = {
   ],
   daisyui: {
     themes: [
-      "dark",
       {
         europaLight: {
-          "primary": "#b91c1c",
+          "primary": "#dc2626",
           "secondary": "#9ca3af",
           "accent": "#6b7280",
           "neutral": "#6b7280",
-          "base-100": "#e7e5e4",
+          "base-100": "#f5f5f4",
           "info": "#0ea5e9",
           "success": "#84cc16",
           "warning": "#facc15",
-          "error": "#dc2626",
+          "error": "#b91c1c",
         },
         europaDark: {
-          "primary": "#b91c1c",
+          "primary": "#dc2626",
           "secondary": "#9ca3af",
           "accent": "#6b7280",
           "neutral": "#6b7280",
-          "base-100": "#44403c",
+          "base-100": "#111827",
           "info": "#0ea5e9",
           "success": "#84cc16",
           "warning": "#facc15",
-          "error": "#dc2626",
+          "error": "#b91c1c",
         }
       }
     ]

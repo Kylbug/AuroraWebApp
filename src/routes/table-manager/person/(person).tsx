@@ -1,4 +1,4 @@
-import { createSignal, onMount } from "solid-js";
+import { createSignal } from "solid-js";
 import Table, { DisplayColumn } from "~/components/Table";
 import { Person } from "~/models/Person";
 import { PersonService } from "~/services/personService";
@@ -13,7 +13,7 @@ export default function PersonList() {
 
   const columns = [
     { header: "ID", key: "id", showInForm: false },
-    { header: "Column", key: "column", showInForm: true, type: 'text' },
+    { header: "Column", key: "column", showInForm: true},
     { header: "Datatype", key: "e3kDatatype", showInForm: true, type: 'custom', customTypeList: customDataTypeOptions },
     { header: "NotNull", key: "notNull", showInForm: true, type: 'boolean' },
     { header: "Created", key: "created", showInForm: false },
@@ -30,6 +30,15 @@ export default function PersonList() {
       console.error("Failed to fetch persons:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchPersonById = async (id: string): Promise<Person | null> => {
+    try {
+      return await personService.getPersonById(id);
+    } catch (error) {
+      console.error("Failed to fetch person by id:", error);
+      return null;
     }
   };
 
@@ -61,8 +70,6 @@ export default function PersonList() {
       console.error("Failed to delete person:", error);
     }
   };
-  
-  onMount(fetchData);
 
   return (
     <div>
@@ -73,6 +80,8 @@ export default function PersonList() {
         onCreate={createPerson}
         onUpdate={updatePerson}
         onDelete={deletePerson}
+        onFetch={fetchData}
+        fetchPersonById={fetchPersonById}
       />
     </div>
   );

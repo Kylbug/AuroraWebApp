@@ -17,7 +17,7 @@ interface TableProps<T> {
   onUpdate: (id: string, updatedData: Partial<T>) => void;
   onDelete: (id: string) => void;
   onFetch?: () => void;
-  fetchPersonById: (id: string) => Promise<T | null>;  // New prop
+  fetchPersonById: (id: string) => Promise<T | null>;
 }
 
 export default function Table<T extends { id: string | number }>(props: TableProps<T>) {
@@ -123,7 +123,7 @@ export default function Table<T extends { id: string | number }>(props: TablePro
   return (
     <div>
       <div class="flex justify-end mb-4">
-        <button class="btn" onClick={() => openModal()}>
+        <button class="btn  bg-secondary hover:bg-primary" onClick={() => openModal()}>
           New Entry
         </button>
       </div>

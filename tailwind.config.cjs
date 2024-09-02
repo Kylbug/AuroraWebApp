@@ -11,9 +11,9 @@ module.exports = {
     themes: [
       {
         europaLight: {
-          "primary": "#dc2626",
-          "secondary": "#9ca3af",
-          "accent": "#6b7280",
+          "primary": "#f87171",
+          "secondary": "#e7e5e4",
+          "accent": "#d6d3d1",
           "neutral": "#6b7280",
           "base-100": "#f5f5f4",
           "info": "#0ea5e9",
@@ -23,8 +23,8 @@ module.exports = {
         },
         europaDark: {
           "primary": "#dc2626",
-          "secondary": "#9ca3af",
-          "accent": "#6b7280",
+          "secondary": "#44403c",
+          "accent": "#78716c",
           "neutral": "#6b7280",
           "base-100": "#1c1917",
           "info": "#0ea5e9",

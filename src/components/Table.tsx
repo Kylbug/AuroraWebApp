@@ -59,7 +59,7 @@ export default function Table<T>(props: TableProps<T>) {
   return (
     <div>
       <div class="flex justify-end mb-4">
-        <button class="btn" onClick={openModal}>
+        <button class="btn bg-secondary hover:bg-primary" onClick={openModal}>
           New Entry
         </button>
       </div>
@@ -76,7 +76,7 @@ export default function Table<T>(props: TableProps<T>) {
             <tbody>
               <For each={props.data}>
                 {(item) => (
-                  <tr class="hover">
+                  <tr class="hover:bg-secondary">s
                     <For each={props.columns}>
                       {(column) => <td>{item[column.key]?.toString()}</td>}
                     </For>

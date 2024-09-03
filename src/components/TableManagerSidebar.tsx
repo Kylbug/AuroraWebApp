@@ -18,9 +18,9 @@ export default function TableManagerSidebar() {
       href: "/table-manager/person",
     },
     {
-      text: "Kunden",
+      text: "Betriebe",
       icon: <i class="fa-solid fa-address-book"></i>,
-      href: "/table-manager/other-table",
+      href: "/table-manager/company",
     },
   ];
 

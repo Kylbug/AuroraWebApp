@@ -15,6 +15,7 @@
     "autoprefixer": "^10.4.19",
     "pocketbase": "^0.21.5",
     "postcss": "^8.4.38",
+    "solid-app-router": "^0.4.2",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.18",
     "tailwindcss": "^3.4.3",

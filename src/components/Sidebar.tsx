@@ -46,10 +46,6 @@ function DropdownButton(props: DropdownButtonProps) {
         );
     };
 
-    const isSubItemActive = (href: string) => {
-        return location.pathname === href;
-    };
-
     return (
         <div class="tooltip tooltip-right" data-tip={props.text}>
             <div class='dropdown dropdown-bottom dropdown-hover'>
@@ -76,7 +72,7 @@ export default function Sidebar() {
     return (
         <aside class="bg-base-100 flex flex-col items-center h-screen">
             <div class="bg-base-100 mt-4 mb-4">
-                <a class="">
+                <a>
                     <i class="fa-solid fa-chart-simple text-4xl text-base-content"></i>
                 </a>
             </div>

@@ -3,6 +3,7 @@ import Table, { DisplayColumn } from "~/components/Table";
 import { Person } from "~/models/Person";
 import { PersonService } from "~/services/personService";
 import { XDataTypeList } from "~/models/XDataType";
+import TableManagerSidebar from "~/components/TableManagerSidebar";
 
 export default function PersonList() {
   const [persons, setPersons] = createSignal<Person[]>([]);
@@ -13,7 +14,7 @@ export default function PersonList() {
 
   const columns = [
     { header: "ID", key: "id", showInForm: false },
-    { header: "Column", key: "column", showInForm: true},
+    { header: "Column", key: "column", showInForm: true },
     { header: "Datatype", key: "e3kDatatype", showInForm: true, type: 'custom', customTypeList: customDataTypeOptions },
     { header: "NotNull", key: "notNull", showInForm: true, type: 'boolean' },
     { header: "Created", key: "created", showInForm: false },
@@ -71,17 +72,21 @@ export default function PersonList() {
   };
 
   return (
-    <div>
-      <Table
-        data={persons()}
-        columns={columns}
-        loading={loading()}
-        onCreate={createPerson}
-        onUpdate={updatePerson}
-        onDelete={deletePerson}
-        onFetch={fetchData}
-        fetchPersonById={fetchPersonById}
-      />
+    <div class="flex h-full">
+      <TableManagerSidebar />
+      {/* Main Content */}
+      <div class="flex-grow overflow-auto p-4">
+        <Table
+          data={persons()}
+          columns={columns}
+          loading={loading()}
+          onCreate={createPerson}
+          onUpdate={updatePerson}
+          onDelete={deletePerson}
+          onFetch={fetchData}
+          fetchPersonById={fetchPersonById}
+        />
+      </div>
     </div>
   );
 }

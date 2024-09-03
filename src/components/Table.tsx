@@ -13,10 +13,10 @@ interface TableProps<T> {
   data: T[];
   columns: DisplayColumn<T>[];
   loading: boolean;
-  onCreate: (newItem: T) => void;
-  onUpdate: (id: string, updatedData: Partial<T>) => void;
-  onDelete: (id: string) => void;
-  onFetch?: () => void;
+  onCreate: (newItem: T) => Promise<void>;
+  onUpdate: (id: string, updatedData: Partial<T>) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+  onFetch?: () => Promise<void>;
   fetchPersonById: (id: string) => Promise<T | null>;
 }
 
@@ -77,29 +77,27 @@ export default function Table<T extends { id: string | number }>(props: TablePro
   };
 
   const closeModal = () => {
-    if (hasUnsavedChanges()) {
-      const confirmClose = confirm("You have unsaved changes. Are you sure you want to close the form?");
-      if (!confirmClose) {
-        return;
-      }
-    }
     const modal = document.getElementById('CreateOrEditForm') as HTMLDialogElement;
     modal?.close();
     navigate(location.pathname, { replace: true });
   };
 
-  const handleCreateOrUpdate = () => {
+  const handleCreateOrUpdate = async () => {
     if (formValid()) {
-      if (isEditing()) {
-        if (hasUnsavedChanges()) {
-          props.onUpdate(currentId() as string, newItem());
-          setHasUnsavedChanges(false); // Ensure no unsaved changes after update
-          closeModal();
+      try {
+        if (isEditing()) {
+          if (hasUnsavedChanges()) {
+            await props.onUpdate(currentId() as string, newItem());
+          }
+        } else {
+          await props.onCreate(newItem() as T);
         }
-      } else {
-        props.onCreate(newItem() as T);
-        setHasUnsavedChanges(false); // Ensure no unsaved changes after create
+        if (props.onFetch) {
+          await props.onFetch(); // Refetch the data after operation
+        }
         closeModal();
+      } catch (error) {
+        console.error("Operation failed:", error);
       }
     }
   };
@@ -108,6 +106,21 @@ export default function Table<T extends { id: string | number }>(props: TablePro
     setNewItem(prev => ({ ...prev, [key]: value }));
     setHasUnsavedChanges(true); // Track unsaved changes only after user input
     validateForm();
+  };
+
+  const handleDelete = async () => {
+    const confirmDelete = confirm("Are you sure you want to delete this entry?");
+    if (confirmDelete) {
+      try {
+        await props.onDelete(currentId() as string);
+        if (props.onFetch) {
+          await props.onFetch(); // Refetch the data after deletion
+        }
+        closeModal();
+      } catch (error) {
+        console.error("Delete operation failed:", error);
+      }
+    }
   };
 
   createEffect(() => {
@@ -237,19 +250,26 @@ export default function Table<T extends { id: string | number }>(props: TablePro
             </For>
           </div>
           <div class="modal-action flex justify-end">
-            <button 
-              class="btn mr-2" 
-              onClick={handleCreateOrUpdate} 
-              disabled={
-                !formValid() || 
-                (isEditing() && !hasUnsavedChanges())
-              }
-            >
-              {isEditing() ? "Edit" : "Create"}
-            </button>
-            <button class="btn" onClick={closeModal}>
-              Close
-            </button>
+            <Show when={isEditing()}>
+              <button class="btn btn-error btn-outline" onClick={handleDelete}>
+                Delete
+              </button>
+            </Show>
+            <div class="flex justify-end w-full">
+              <button 
+                class="btn mr-2" 
+                onClick={handleCreateOrUpdate} 
+                disabled={
+                  !formValid() || 
+                  (isEditing() && !hasUnsavedChanges())
+                }
+              >
+                {isEditing() ? "Edit" : "Create"}
+              </button>
+              <button class="btn btn-ghost" onClick={closeModal}>
+                Close
+              </button>
+            </div>
           </div>
         </div>
       </dialog>

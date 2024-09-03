@@ -1,4 +1,4 @@
-import { For, Show, createSignal, onMount } from "solid-js";
+import { For, Show, createSignal, onMount, createEffect } from "solid-js";
 import { useNavigate, useLocation } from "@solidjs/router";
 
 export interface DisplayColumn<T> {
@@ -22,10 +22,12 @@ interface TableProps<T> {
 
 export default function Table<T extends { id: string | number }>(props: TableProps<T>) {
 
-  let newItem = {} as Partial<T>;
+  const [newItem, setNewItem] = createSignal<Partial<T>>({});
+  const [originalItem, setOriginalItem] = createSignal<Partial<T>>({});
   const [formValid, setFormValid] = createSignal(false);
   const [errors, setErrors] = createSignal<Record<string, boolean>>({});
   const [isEditing, setIsEditing] = createSignal(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = createSignal(false);
   const [currentId, setCurrentId] = createSignal<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,27 +36,40 @@ export default function Table<T extends { id: string | number }>(props: TablePro
     if (id) {
       setCurrentId(id);
       setIsEditing(true);
-      props.fetchPersonById(id).then(existingPerson => {
-        if (existingPerson) {
-          newItem = { ...(existingPerson as unknown as Partial<T>) };
-          validateForm();
-          const params = new URLSearchParams(location.search);
-          params.set('id', id);
-          navigate(`${location.pathname}?${params.toString()}`, { replace: false });
-          const modal = document.getElementById('CreateOrEditForm') as HTMLDialogElement;
-          modal?.showModal();
-        } else {
-          console.log("No matching person found for id:", id);
+      props.fetchPersonById(id)
+        .then(existingPerson => {
+          if (existingPerson) {
+            const item = { ...(existingPerson as Partial<T>) };
+            setNewItem(() => item);
+            setOriginalItem(() => item);
+            setHasUnsavedChanges(false);
+            validateForm();
+            const params = new URLSearchParams(location.search);
+            params.set('id', id);
+            navigate(`${location.pathname}?${params.toString()}`, { replace: false });
+            const modal = document.getElementById('CreateOrEditForm') as HTMLDialogElement;
+            modal?.showModal();
+          } else {
+            console.log("No matching person found for id:", id);
+            navigate(location.pathname, { replace: true });
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching person by id:", error);
           navigate(location.pathname, { replace: true });
-        }
-      }).catch(error => {
-        console.error("Error fetching person by id:", error);
-        navigate(location.pathname, { replace: true });
-      });
+        });
     } else {
       setCurrentId(null);
       setIsEditing(false);
-      newItem = {} as Partial<T>;
+      setHasUnsavedChanges(false);
+
+      const emptyNewItem: Partial<T> = {};
+      props.columns.forEach(column => {
+        emptyNewItem[column.key] = column.type === 'boolean' ? undefined : '' as any;
+      });
+      setNewItem(() => emptyNewItem);
+      setOriginalItem(() => emptyNewItem);
+
       validateForm();
       const modal = document.getElementById('CreateOrEditForm') as HTMLDialogElement;
       modal?.showModal();
@@ -62,6 +77,12 @@ export default function Table<T extends { id: string | number }>(props: TablePro
   };
 
   const closeModal = () => {
+    if (hasUnsavedChanges()) {
+      const confirmClose = confirm("You have unsaved changes. Are you sure you want to close the form?");
+      if (!confirmClose) {
+        return;
+      }
+    }
     const modal = document.getElementById('CreateOrEditForm') as HTMLDialogElement;
     modal?.close();
     navigate(location.pathname, { replace: true });
@@ -70,26 +91,36 @@ export default function Table<T extends { id: string | number }>(props: TablePro
   const handleCreateOrUpdate = () => {
     if (formValid()) {
       if (isEditing()) {
-        props.onUpdate(currentId() as string, newItem as Partial<T>);
+        if (hasUnsavedChanges()) {
+          props.onUpdate(currentId() as string, newItem());
+          setHasUnsavedChanges(false); // Ensure no unsaved changes after update
+          closeModal();
+        }
       } else {
-        props.onCreate(newItem as T);
+        props.onCreate(newItem() as T);
+        setHasUnsavedChanges(false); // Ensure no unsaved changes after create
+        closeModal();
       }
-      closeModal();
     }
   };
-
+  
   const handleInput = (key: keyof T, value: any) => {
-    newItem[key] = value;
+    setNewItem(prev => ({ ...prev, [key]: value }));
+    setHasUnsavedChanges(true); // Track unsaved changes only after user input
     validateForm();
   };
+
+  createEffect(() => {
+    const isChanged = JSON.stringify(newItem()) !== JSON.stringify(originalItem());
+    setHasUnsavedChanges(isChanged);
+  });
 
   const validateForm = () => {
     const newErrors: Record<string, boolean> = {};
     let isValid = true;
-
     props.columns.forEach((column) => {
       if (column.showInForm) {
-        const value = newItem[column.key];
+        const value = newItem()[column.key];
         if (value === undefined || value === null || value.toString().trim() === '') {
           newErrors[column.key as string] = true;
           isValid = false;
@@ -105,25 +136,19 @@ export default function Table<T extends { id: string | number }>(props: TablePro
     if (props.onFetch) {
       props.onFetch();
     }
-    console.log("Component mounted, checking URL for id parameter...");
   
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
-    console.log("URLSearchParams:", params.toString());
-    console.log("Extracted id from URL:", id);
   
     if (id) {
-      console.log("ID found in URL:", id);
       openModal(id);
-    } else {
-      console.log("No id parameter found in URL.");
     }
   });
 
   return (
     <div>
       <div class="flex justify-end mb-4">
-        <button class="btn  bg-secondary hover:bg-primary" onClick={() => openModal()}>
+        <button class="btn bg-secondary hover:bg-primary" onClick={() => openModal()}>
           New Entry
         </button>
       </div>
@@ -163,48 +188,48 @@ export default function Table<T extends { id: string | number }>(props: TablePro
                     <label class="form-control w-full">
                       <div class="label flex justify-between">
                         <span class="label-text">{column.header}</span>
-                        <Show when={errors()[column.key as string]}>
-                          <span class="label-text-alt text-red-500">This field is required</span>
+                      </div>
+                      <div class="indicator w-full">
+                        <span class="indicator-item badge badge-secondary mr-5">Required</span>
+                        <Show
+                          when={column.type === 'boolean'}
+                          fallback={
+                            column.type === 'custom' && column.customTypeList ? (
+                              <select
+                                class="select select-bordered w-full"
+                                value={newItem()[column.key] === undefined ? '' : (newItem()[column.key] as string)}
+                                onChange={(e) => handleInput(column.key as keyof Omit<T, 'id'>, e.target.value === '' ? undefined : e.target.value)}
+                              >
+                                <option value="" disabled>
+                                  Pick one
+                                </option>
+                                <For each={column.customTypeList}>
+                                  {(value) => <option value={value}>{value}</option>}
+                                </For>
+                              </select>
+                            ) : (
+                              <input
+                                type={column.type === 'number' ? 'number' : 'text'}
+                                class="input input-bordered w-full"
+                                value={(newItem()[column.key] as string) || ''}
+                                onInput={(e) => handleInput(column.key as keyof Omit<T, 'id'>, (e.target as HTMLInputElement).value)}
+                              />
+                            )
+                          }
+                        >
+                          <select
+                            class="select select-bordered w-full"
+                            value={newItem()[column.key] === true ? "true" : newItem()[column.key] === false ? "false" : ""}
+                            onChange={(e) => handleInput(column.key as keyof Omit<T, 'id'>, e.target.value === 'true')}
+                          >
+                            <option value="" disabled>
+                              Pick one
+                            </option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                          </select>
                         </Show>
                       </div>
-                      <Show
-                        when={column.type === 'boolean'}
-                        fallback={
-                          column.type === 'custom' && column.customTypeList ? (
-                            <select
-                              class="select select-bordered w-full"
-                              value={newItem[column.key] as string}
-                              onChange={(e) => handleInput(column.key as keyof Omit<T, 'id'>, e.target.value)}
-                            >
-                              <option disabled selected value="">
-                                Pick one
-                              </option>
-                              <For each={column.customTypeList}>
-                                {(value) => <option value={value}>{value}</option>}
-                              </For>
-                            </select>
-                          ) : (
-                            <input
-                              type={column.type === 'number' ? 'number' : 'text'}
-                              class="input input-bordered w-full"
-                              value={newItem[column.key] as string}
-                              onInput={(e) => handleInput(column.key as keyof Omit<T, 'id'>, (e.target as HTMLInputElement).value)}
-                            />
-                          )
-                        }
-                      >
-                        <select
-                          class="select select-bordered w-full"
-                          value={newItem[column.key] === true ? "true" : "false"}
-                          onChange={(e) => handleInput(column.key as keyof Omit<T, 'id'>, e.target.value === 'true')}
-                        >
-                          <option disabled selected value="">
-                            Pick one
-                          </option>
-                          <option value="true">True</option>
-                          <option value="false">False</option>
-                        </select>
-                      </Show>
                     </label>
                   </div>
                 )
@@ -212,7 +237,14 @@ export default function Table<T extends { id: string | number }>(props: TablePro
             </For>
           </div>
           <div class="modal-action flex justify-end">
-            <button class="btn mr-2" onClick={handleCreateOrUpdate} disabled={!formValid()}>
+            <button 
+              class="btn mr-2" 
+              onClick={handleCreateOrUpdate} 
+              disabled={
+                !formValid() || 
+                (isEditing() && !hasUnsavedChanges())
+              }
+            >
               {isEditing() ? "Edit" : "Create"}
             </button>
             <button class="btn" onClick={closeModal}>

@@ -24,7 +24,6 @@ export default function PersonList() {
     setLoading(true);
     try {
       const data = await personService.getAllPersons();
-      console.log("Fetched persons data:", data);
       setPersons(data);
     } catch (error) {
       console.error("Failed to fetch persons:", error);

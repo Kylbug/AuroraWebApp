@@ -3,8 +3,8 @@ import PocketBase from 'pocketbase';
 export class TableRepository {
   private pb: PocketBase;
 
-  constructor() {
-    this.pb = new PocketBase('http://localhost:8090');
+  constructor(pb: PocketBase) {
+    this.pb = pb;
   }
 
   async getById(tableName: string, id: string): Promise<any> {

@@ -1,35 +1,33 @@
 import PocketBase from 'pocketbase';
-import Cookies from 'universal-cookie';
 
-export class AuthService {
-  private pb: PocketBase;
-  private cookies: Cookies;
+const pb = new PocketBase('http://127.0.0.1:8090'); 
 
-  constructor() {
-    this.pb = new PocketBase('http://localhost:8090');
-    this.cookies = new Cookies();
-  }
-
+export const authService = {
   async login(email: string, password: string): Promise<any> {
     try {
-      const authData = await this.pb.collection('users').authWithPassword(email, password);
-      this.cookies.set('auth_token', this.pb.authStore.token, { path: '/' });
-      return authData;
-    } 
-    catch (error) {
-      console.error('Login failed:', error);
+      const authData = await pb.collection('users').authWithPassword(email, password);
+      return authData; 
+    } catch (error) {
+      console.error('Login fehlgeschlagen:', error);
       throw error; 
     }
-    
-  }
+  },
+  
+  async logout(): Promise<void> {
+    pb.authStore.clear();
+  },
 
-  isLoggedIn(): boolean {
-    console.log(this.pb.authStore.isValid);
-    return this.pb.authStore.isValid;
-  }
+  async getUser(): Promise<any | null> {
 
-  getCurrentUser(): any {
-    console.log(this.pb.authStore.model);
-    return this.pb.authStore.model;
+    try {
+      if (pb.authStore.isValid) {
+        await pb.collection('users').authRefresh();
+        return pb.authStore.model; 
+      }
+    } catch (error) {
+      pb.authStore.clear();
+    }
+
+    return null;
   }
-}
+};

@@ -12,12 +12,17 @@ export default function ThemeToggleComponent() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = createSignal("");
   const [sidebarButtons, setSidebarButtons] = createSignal<SidebarButton[]>([]);
-  
+  const [isLoading, setIsLoading] = createSignal(true);
+  const [errorMessage, setErrorMessage] = createSignal<string | null>(null);
+
+  // TableService-Instanz erstellen
   const tableService = new TableService();
 
+  // Daten laden und Authentifizierungsstatus prüfen
   onMount(async () => {
     try {
-      const tables = await tableService.getAllTables();
+      setIsLoading(true);
+      const tables = await tableService.getAllTables(); // Prüft automatisch Authentifizierung
       const buttons = tables.map((table) => ({
         text: table.name,
         icon: <i class="fa-solid fa-table"></i>, 
@@ -25,7 +30,11 @@ export default function ThemeToggleComponent() {
       }));
       setSidebarButtons(buttons);
     } catch (error) {
-      console.error("Failed to load tables:", error);
+      // Fehlerbehandlung, falls nicht authentifiziert oder anderer Fehler auftritt
+      setErrorMessage("Failed to load tables or not authenticated.");
+      console.error("Error loading tables:", error);
+    } finally {
+      setIsLoading(false);
     }
   });
 
@@ -35,6 +44,14 @@ export default function ThemeToggleComponent() {
       button.text.toLowerCase().includes(query)
     );
   };
+
+  if (isLoading()) {
+    return <div>Loading...</div>; // Ladeanzeige während des Ladens
+  }
+
+  if (errorMessage()) {
+    return <div class="alert alert-error">{errorMessage()}</div>; // Fehlermeldung anzeigen, wenn ein Fehler auftritt
+  }
 
   return (
     <div class="flex flex-row h-full">

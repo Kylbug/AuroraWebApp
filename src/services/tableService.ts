@@ -1,27 +1,34 @@
 import { TableRepository } from "~/repositories/tableRepository";
-import { AuthMiddleware } from "~/middlewares/authMiddleware";
+import PocketBase from "pocketbase";
 
 export class TableService {
   private tableRepository: TableRepository;
-  private authMiddleware: AuthMiddleware;
+  private pb: PocketBase;
 
   constructor() {
-    this.tableRepository = new TableRepository();
-    this.authMiddleware = new AuthMiddleware();
+    this.pb = new PocketBase('http://localhost:8090');
+    this.tableRepository = new TableRepository(this.pb);
+  }
+
+  // Prüft, ob der Benutzer eingeloggt ist
+  private isAuthenticated() {
+    if (!this.pb.authStore.isValid) {
+      throw new Error("User is not authenticated.");
+    }
   }
 
   async getRecordById(tableName: string, id: string): Promise<any> {
-    await this.authMiddleware.checkAuthentication(); 
+    this.isAuthenticated(); // Authentifizierung prüfen
     return await this.tableRepository.getById(tableName, id);
   }
 
   async getAllRecords(tableName: string): Promise<any[]> {
-    await this.authMiddleware.checkAuthentication(); 
+    this.isAuthenticated(); // Authentifizierung prüfen
     return await this.tableRepository.getAll(tableName);
   }
 
   async createRecord(tableName: string, data: any): Promise<any> {
-    await this.authMiddleware.checkAuthentication(); 
+    this.isAuthenticated(); // Authentifizierung prüfen
     if (data.default) {
       throw new Error("Cannot create a record with a default column.");
     }
@@ -29,7 +36,7 @@ export class TableService {
   }
 
   async updateRecord(tableName: string, id: string, data: any): Promise<any> {
-    await this.authMiddleware.checkAuthentication();
+    this.isAuthenticated(); // Authentifizierung prüfen
     const existingRecord = await this.tableRepository.getById(tableName, id);
     if (existingRecord.default) {
       throw new Error("Cannot update a record with a default column.");
@@ -38,7 +45,7 @@ export class TableService {
   }
 
   async deleteRecord(tableName: string, id: string): Promise<void> {
-    await this.authMiddleware.checkAuthentication(); 
+    this.isAuthenticated(); // Authentifizierung prüfen
     const existingRecord = await this.tableRepository.getById(tableName, id);
     if (existingRecord.default) {
       throw new Error("Cannot delete a record with a default column.");
@@ -47,8 +54,7 @@ export class TableService {
   }
 
   async getAllTables(): Promise<any[]> {
-    await this.authMiddleware.checkAuthentication();
+    this.isAuthenticated(); // Authentifizierung prüfen
     return await this.tableRepository.getAllTables();
-    console.log('tried to fetch tables');
   }
 }

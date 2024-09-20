@@ -3,12 +3,14 @@ import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 import NavbarComponent from "~/components/NavbarComponent";
 import SidebarComponent from "~/components/SidebarComponent";
+import AuthGuardLayout from "~/layouts/AuthGuardLayout";
 import "./app.css";
 
 export default function App() {
   return (
     <Router
       root={props => (
+        <AuthGuardLayout>
         <div class="flex h-screen bg-base-100">
           <SidebarComponent />
           <div class="divider divider-horizontal m-0 bg-base-100 w-0"/>
@@ -20,6 +22,7 @@ export default function App() {
             </div>
           </div>
         </div>
+        </AuthGuardLayout>
       )}
     >
       <FileRoutes />

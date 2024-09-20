@@ -1,4 +1,4 @@
-export interface Company {
+export interface TableType {
     id: number;
     column: string;
     e3kDatatype: string;
@@ -7,3 +7,4 @@ export interface Company {
     created: Date;
     updated: Date;
   }
+  

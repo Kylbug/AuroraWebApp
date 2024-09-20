@@ -4,7 +4,7 @@ onMount(async () => {
   themeChange();
 })
 
-export default function ThemeController() {
+export default function ThemeToggleComponent() {
   return (
     <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn m-1 bg-secondary hover:bg-primary">

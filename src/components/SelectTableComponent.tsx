@@ -1,5 +1,6 @@
 import { A, useLocation } from "@solidjs/router";
-import { JSX, createSignal } from 'solid-js';
+import { JSX, createSignal, onMount } from 'solid-js';
+import { TableService } from '~/services/tableService';
 
 interface SidebarButton {
   text: string;
@@ -7,26 +8,30 @@ interface SidebarButton {
   href: string;
 }
 
-export default function TableManagerSidebar() {
+export default function ThemeToggleComponent() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = createSignal("");
+  const [sidebarButtons, setSidebarButtons] = createSignal<SidebarButton[]>([]);
+  
+  const tableService = new TableService();
 
-  const sidebarButtons: SidebarButton[] = [
-    {
-      text: "Personen",
-      icon: <i class="fa-solid fa-users"></i>,
-      href: "/table-manager/person",
-    },
-    {
-      text: "Betriebe",
-      icon: <i class="fa-solid fa-address-book"></i>,
-      href: "/table-manager/company",
-    },
-  ];
+  onMount(async () => {
+    try {
+      const tables = await tableService.getAllTables();
+      const buttons = tables.map((table) => ({
+        text: table.name,
+        icon: <i class="fa-solid fa-table"></i>, 
+        href: `/table-manager/${table.name}`, 
+      }));
+      setSidebarButtons(buttons);
+    } catch (error) {
+      console.error("Failed to load tables:", error);
+    }
+  });
 
   const filteredButtons = () => {
     const query = searchQuery().toLowerCase();
-    return sidebarButtons.filter(button =>
+    return sidebarButtons().filter(button =>
       button.text.toLowerCase().includes(query)
     );
   };

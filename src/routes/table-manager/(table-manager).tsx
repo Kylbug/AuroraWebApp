@@ -1,16 +1,11 @@
-import { useNavigate } from '@solidjs/router';
-import { onMount } from 'solid-js';
+import SelectTableComponent from '~/components/SelectTableComponent';
+import { Suspense } from 'solid-js';
 
-export default function TableManager() {
-  const navigate = useNavigate();
-
-  onMount(() => {
-    navigate('/table-manager/person', { replace: true });
-  });
-
+export default function TableManager(props : any) {
   return (
     <>
-      Table Manager
+      <SelectTableComponent />
+      <Suspense>{props.children}</Suspense>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { createMemo } from 'solid-js';
 import { useLocation } from '@solidjs/router';
-import ThemeController from './ThemeController';
+import ThemeToggleComponent from './ThemeToggleComponent';
 
 function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -30,7 +30,7 @@ export default function Navbar() {
           <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
         </div>
         <div class="ml-1 mr-1">
-          <ThemeController />
+          <ThemeToggleComponent />
         </div>
         <div class="dropdown dropdown-end">
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">

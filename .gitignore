@@ -27,3 +27,6 @@ gitignore
 .DS_Store
 Thumbs.db
 /pocketbase
+
+# Umgebungsvariablen-Datei
+.env

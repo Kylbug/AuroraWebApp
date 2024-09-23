@@ -1,7 +1,7 @@
 import { useNavigate } from '@solidjs/router';
 import { authService } from '../services/authService';
 
-export default function Dashboard() {
+export default function Index() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {

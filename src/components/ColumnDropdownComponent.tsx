@@ -43,7 +43,7 @@ export default function ColumnDropdown() {
   };
 
   return (
-    <div class="dropdown dropdown-bottom dropdown-end">
+    <div class="dropdown dropdown-bottom dropdown-end z-100">
       <div
         tabindex="0"
         role="button"
@@ -51,7 +51,7 @@ export default function ColumnDropdown() {
       >
         Columns
       </div>
-      <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow border border-secondary">
+      <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box w-52 p-2 shadow border border-secondary">
         {columns().map((column) => (
           <li>
             <label class="flex items-center">

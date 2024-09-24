@@ -1,13 +1,14 @@
 import { createSignal, onMount } from 'solid-js';
-import { TableService } from '~/services/tableService';
+import { TableDAL } from '~/DAL/tableDAL';
 import SelectTableComponent from '~/components/SelectTableComponent';
 
 const [tables, setTables] = createSignal<{name: string}[]>([]);
 const [isLoading, setIsLoading] = createSignal(true);
+
 const fetchTables = async () => {
-  const tableService = new TableService();
-  const fetchedTables = await tableService.getAllTables();
-  setTables(fetchedTables);
+  const tableDAL = new TableDAL(); 
+  const fetchedTables = await tableDAL.getAllTables();
+  setTables(fetchedTables.map(table => ({ name: table }))); 
   setIsLoading(false);
 };
 

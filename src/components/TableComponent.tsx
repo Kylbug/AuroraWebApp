@@ -1,9 +1,16 @@
 import { For, createEffect, createMemo } from "solid-js";
 import { useNavigate, useSearchParams } from "@solidjs/router";
-import { TableType } from "~/models/TableType";
 
 interface TableComponentProps {
-  data: TableType[];
+  data: {
+    id?: string;
+    column: string;
+    e3kDatatype: string;
+    notNull: boolean;
+    default: boolean;
+    created?: string;
+    updated?: string;
+  }[];
 }
 
 const parseColumnsFromURL = (columnsParam: string | undefined) => {
@@ -33,8 +40,10 @@ export default function TableComponent(props: TableComponentProps) {
   const columns = createMemo(() => parseColumnsFromURL(searchParams.columns));
   const activeColumns = createMemo(() => columns().filter(column => column.active));
 
-  const handleRowClick = (id: number) => {
-    navigate(`/tableManager/${searchParams.tableName}/${id}`);
+  const handleRowClick = (id: number | undefined) => {
+    if (id !== undefined) {
+      navigate(`/tableManager/${searchParams.tableName}/${id}`);
+    }
   };
 
   createEffect(() => {
@@ -53,13 +62,13 @@ export default function TableComponent(props: TableComponentProps) {
               </For>
             </tr>
           </thead>
-          <tbody >
+          <tbody>
             <For each={props.data}>
               {(item) => (
                 <tr class="hover" onClick={() => handleRowClick(item.id)}>
                   <For each={activeColumns()}>
                     {(column) => (
-                      <td>{item[column.key as keyof TableType]?.toString()}</td>
+                      <td>{item[column.key as keyof typeof item]?.toString()}</td>
                     )}
                   </For>
                 </tr>

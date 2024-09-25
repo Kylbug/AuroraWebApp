@@ -9,7 +9,6 @@ interface SidebarButton {
 
 export default function SelectTableComponent(props: {tables: {name: string}[], errorMessage: string | null;}) {
   const location = useLocation();
-  console.log("tables in Component", props.tables);
 
   const sidebarButtons: SidebarButton[] = props.tables
     .filter(table => table.name !== "users")

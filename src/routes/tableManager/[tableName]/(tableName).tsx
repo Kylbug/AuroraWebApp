@@ -11,14 +11,15 @@ const fetchTableData = async (tableName: string) => {
 
   return records.map(record => ({
     ...record,
+    id: record.id?.toString(),
     created: record.created?.toISOString(),
     updated: record.updated?.toISOString()
   }));
 };
 
+
 export default function TableName() {
   const params = useParams();
-  
   const [data] = createResource(() => params.tableName, fetchTableData);
 
   return (

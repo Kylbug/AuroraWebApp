@@ -1,5 +1,5 @@
 import { For, createEffect, createMemo } from "solid-js";
-import { useNavigate, useSearchParams } from "@solidjs/router";
+import { useNavigate, useParams } from "@solidjs/router";
 
 interface TableComponentProps {
   data: {
@@ -34,25 +34,25 @@ const parseColumnsFromURL = (columnsParam: string | undefined) => {
 };
 
 export default function TableComponent(props: TableComponentProps) {
-  const [searchParams] = useSearchParams();
+  const params = useParams();
   const navigate = useNavigate();
 
-  const columns = createMemo(() => parseColumnsFromURL(searchParams.columns));
+  const columns = createMemo(() => parseColumnsFromURL(params.columns));
   const activeColumns = createMemo(() => columns().filter(column => column.active));
 
-  const handleRowClick = (id: number | undefined) => {
-    if (id !== undefined) {
-      navigate(`/tableManager/${searchParams.tableName}/${id}`);
+  const handleRowClick = (id: string | undefined) => {
+    if (id) {
+      const tableName = params.tableName;
+      navigate(`/tableManager/${tableName}/${id}`);
     }
   };
 
   createEffect(() => {
-    console.log("URL params changed, columns:", searchParams.columns);
+    console.log("URL params changed, tableName:", params.tableName);
   });
 
   return (
     <div class="flex flex-col h-full">
-      {/* Tabelle mit scrollbarem Body */}
       <div class="flex-grow overflow-y-auto">
         <table class="table min-w-full">
           <thead class="sticky top-0 shadow bg-base-100">

@@ -1,32 +1,44 @@
 import { useParams } from "@solidjs/router";
 import { createSignal, onMount } from "solid-js";
-import { TableService } from "~/services/tableService";
+import { TableDAL } from "~/DAL/tableDAL";
+import { TableDTO } from "~/DTO/tableDTO";
 
 export default function AddOrUpdateComponent() {
   const params = useParams();
-  const isEditing = !!params.id;  // Prüfen, ob eine ID vorhanden ist -> dann bearbeiten
-  const [formData, setFormData] = createSignal({
-    column: "",
-    e3kDatatype: "",
-    notNull: false,
-    default: "",
-  });
-
-  const tableService = new TableService();
+  const isEditing = !!params.id;
+  const [formData, setFormData] = createSignal<TableDTO>(
+    new TableDTO(0, "", "", false, false, new Date(), new Date())
+  );
+  
+  const tableDAL = new TableDAL();
 
   onMount(async () => {
     if (isEditing) {
-      const item = await tableService.getRecordById(params.tableName, params.id);
-      setFormData(item);
+      try {
+        const item = await tableDAL.getById(params.tableName, params.id);
+        
+        setFormData(item);
+      } catch (error) {
+        console.error("Failed to fetch record:", error);
+      }
     }
   });
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
-    if (isEditing) {
-      await tableService.updateRecord(params.tableName, params.id, formData());
-    } else {
-      await tableService.createRecord(params.tableName, formData());
+    const dto = formData();
+
+    try {
+      if (isEditing) {
+        await tableDAL.update(params.tableName, String(params.id), dto);
+        alert("Record updated successfully!");
+      } else {
+        await tableDAL.create(params.tableName, dto);
+        alert("Record created successfully!");
+      }
+    } catch (error) {
+      console.error("Failed to save record:", error);
+      alert("Error while saving the record. Please try again.");
     }
   };
 
@@ -60,8 +72,8 @@ export default function AddOrUpdateComponent() {
         <label>Default</label>
         <input
           type="text"
-          value={formData().default}
-          onInput={(e) => setFormData({ ...formData(), default: e.currentTarget.value })}
+          value={formData().default ? "true" : "false"}
+          onInput={(e) => setFormData({ ...formData(), default: e.currentTarget.value === "true" })}
         />
       </div>
       <button type="submit">{isEditing ? "Update" : "Add"} Item</button>
